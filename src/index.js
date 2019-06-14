@@ -1,13 +1,26 @@
 class ToDo {
     constructor (){
-            this.title=[];
-            this.id=[];
-            this.isDone= [];
+            this.store=[];
        };
 
     addItem (task){
-        this.id.push(task.id);
-        this.title.push(task.title);
+        this.store.push({
+            id: task.id, 
+            title: task.title, 
+            isDone:task.isDone
+        });
+        const ulist = document.getElementById('list');
+        let lielem = document.createElement('li');
+        lielem.innerHTML = `<li><input type="checkbox" style="display: inline-block"><p style="display:inline-block">${task.title}</p><i style="display:inline-block" class="delete"></i></li>`;
+        if(ulist) {ulist.appendChild(lielem);}
+    }
+    getItems (ulist){
+        this.store.forEach(element => {
+        console.log(element.title, element.isDone);
+        // let lielem = document.createElement('li');
+        // lielem.innerHTML = `<li><input type="checkbox" style="display: inline-block"><p style="display:inline-block">${element.title}</p><i style="display:inline-block" class="delete"></i></li>`;
+        // if(ulist) {ulist.appendChild(lielem);}
+        });
     }
     // editItem (){
 
@@ -35,7 +48,6 @@ let task2 = new TaskItem(2,'vtoroy');
 list.addItem(task1);
 list.addItem(task2);
 console.log(list);
-console.log(task1);
 
 window.onload=function(){
     const submit = document.getElementById('submit');
@@ -44,7 +56,11 @@ window.onload=function(){
         console.log(field.value);
         let task2=new TaskItem(Math.floor(Math.random()*100),field.value);
         list.addItem(task2);
+        list.getItems(ulist);
     });
+    const ulist = document.getElementById('list');
+    list.getItems(ulist);
+
     console.log(submit);
     console.log(field);
     
