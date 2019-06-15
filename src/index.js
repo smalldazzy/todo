@@ -11,7 +11,9 @@ class ToDo {
         });
         const ulist = document.getElementById('list');
         let lielem = document.createElement('li');
-        lielem.innerHTML = `<li><input type="checkbox" style="display: inline-block"><p style="display:inline-block">${task.title}</p><i style="display:inline-block" class="delete"></i></li>`;
+        lielem.innerHTML = `<input class="check" type="checkbox" style="display: inline-block"><p style="display:inline-block">${task.title}</p><i style="display:inline-block" class="delete"></i>`;
+        console.log(lielem.firstChild);
+        if (task.isDone) {lielem.firstChild.checked=true;}
         if(ulist) {ulist.appendChild(lielem);}
     }
     getItems (){
@@ -19,7 +21,7 @@ class ToDo {
         let returnObj = JSON.parse(localStorage.getItem("TODO"));
         console.log(returnObj);
         returnObj.forEach(element => {
-            console.log(element);
+            // console.log(element);
             this.addItem(element);
 
             // const ulist = document.getElementById('list');
@@ -58,6 +60,7 @@ let list = new ToDo();
 // console.log(list);
 
 window.onload=function(){
+    list.getItems();
     const submit = document.getElementById('submit');
     const field = document.getElementById('inp');
     submit.addEventListener('click', function (){
@@ -69,11 +72,25 @@ window.onload=function(){
         localStorage.setItem("TODO", JSON.stringify(list.store));
 
     });
+    let check = document.getElementsByClassName('check');
+    console.log(check);
+    for (let i=0;i<check.length;i++){
+        check[i].addEventListener('change', function(){
+            if (this.checked) {
+                console.log('na jebalo najmi');
+                console.log(list.store[i]);
+                list.store[i].isDone=true;
+                localStorage.setItem("TODO", JSON.stringify(list.store));
+            } else {
+                console.log('molodets');
+                list.store[i].isDone=false;
+                localStorage.setItem("TODO", JSON.stringify(list.store));
+            }
+        })
+    }
     const ulist = document.getElementById('list');
-    list.getItems();
+    
 
-    console.log(submit);
-    console.log(field);
     
 }
 
