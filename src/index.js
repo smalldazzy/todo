@@ -3,6 +3,7 @@ import TaskItem from './TaskItem';
 import SubTaskItem from './SubTaskItem';
 import TaskItemTime from './TaskItemTime';
 import render from './view';
+// import 'bootstrap';
 
 
 // let task1 = new TaskItem(1,'perviy');
