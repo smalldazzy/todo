@@ -8,14 +8,15 @@ window.onload=function render(){
     list.getItems();
     
     console.log(list);
-    let task3 = new TaskItem('kek');
-    let subtask3 = new SubTaskItem('subkek');
-    task3.addSubItem(subtask3);
-    console.log(task3);
-    let timetask = new TaskItemTime('vremya',1560871996176);
-    console.log(timetask);
-    list.addItem(timetask);
-    list.addItem(task3);
+
+    // let task3 = new TaskItem('kek');
+    // let subtask3 = new SubTaskItem('subkek');
+    // task3.addSubItem(subtask3);
+    // console.log(task3);
+    // let timetask = new TaskItemTime('vremya',1560871996176);
+    // console.log(timetask);
+    // list.addItem(timetask);
+    // list.addItem(task3);
     console.log(list);
     //list.save();
     console.log('render works')
@@ -24,21 +25,81 @@ window.onload=function render(){
     const field = document.getElementById('inp');
     const del = document.getElementsByClassName('del');
     const deldone = document.getElementById('clear');
+    let check = document.getElementsByClassName('check');
     const addsub = document.getElementsByClassName('addsub');
+    const delsub = document.getElementsByClassName('delsub');
+
+    deldone.addEventListener('click',()=>{
+        list.deleteDone();
+        location.reload();
+    });
+
+    for (let i=0;i<del.length;i++){
+            //arrow func
+            del[i].addEventListener('click', function (){
+                list.deleteItem(i);
+                location.reload(); //bad way
+    
+            })
+    }
+
+    submit.addEventListener('click', function (){
+        // console.log(field.value);
+        let task2=new TaskItem(field.value,Math.floor(Math.random()*100));
+        list.addItem(task2);
+        // list.getItems(ulist);
+        // console.log(list.store);
+        list.save();
+        location.reload();//cures initial empty checkbox, clears inputbox
+
+    });
+
+    // console.log(check);
+
+    //add event bubbling
+    for (let i=0;i<check.length;i++){
+        //arrow func
+        check[i].addEventListener('change', function(){
+                list.store[i].switch();
+                list.save();
+        })
+    }
 }
+
     function createItems(list){
         let div = document.getElementsByClassName('todos')[0];
         console.log(div);
         let todolist = document.createElement('ul');
         todolist.setAttribute('class','list');
+        //storage 
         // const todos = JSON.parse(localStorage.getItem('TODO')) || [];
-        let todos = list;
+        let todos = list.store;
         console.log(todos);
         todos.forEach(todo => {
             let item = document.createElement('li');
             item.setAttribute('class','item');
             item.innerHTML = `<input class="check" type="checkbox" style="display: inline-block"><p style="display:inline-block">${todo.title}</p><button style="display:inline-block" class="del"> -</button>`
             +'<button class="addsub">+</button>';
+            
+            if (todo.subTasks && todo.subTasks.length>0){
+                let sublist = document.createElement('ul');
+                sublist.setAttribute('class','sublist');
+                todo.subTasks.forEach(subtask =>{
+                    let subtaskE = document.createElement('li');
+                    subtaskE.setAttribute('class','subitem');
+                    subtaskE.innerHTML=`<input class="subcheck" type="checkbox" style="display: inline-block"><p style="display:inline-block">${subtask.title}</p><button style="display:inline-block" class="delsub"> -</button>`;
+                    sublist.appendChild(subtaskE);
+                });
+                item.appendChild(sublist);
+            }
+            if (todo.date){
+                let datep = document.createElement('p');
+                datep.setAttribute('style','display: inline-block');
+                datep.innerHTML=todo.date;
+                item.innerHTML=`<input class="check" type="checkbox" style="display: inline-block"><p style="display:inline-block">${todo.title}</p><button style="display:inline-block" class="del"> -</button>`;
+                item.appendChild(datep);
+            }
+            if (todo.isDone) {item.firstChild.checked=true;}
             todolist.appendChild(item);
         });
         div.appendChild(todolist);
@@ -61,39 +122,10 @@ window.onload=function render(){
     //     });
     // }
 
-    // deldone.addEventListener('click',()=>{
-    //     list.deleteDone();
-    //     location.reload();
-    // });
+    
 
-    // submit.addEventListener('click', function (){
-    //     // console.log(field.value);
-    //     let task2=new TaskItem(field.value,Math.floor(Math.random()*100));
-    //     list.addItem(task2);
-    //     // list.getItems(ulist);
-    //     // console.log(list.store);
-    //     list.save();
-    //     location.reload();//cures initial empty checkbox, clears inputbox
-
-    // });
-    // let check = document.getElementsByClassName('check');
-    // // console.log(check);
-
-    // //add event bubbling
-    // for (let i=0;i<check.length;i++){
-    //     //arrow func
-    //     check[i].addEventListener('change', function(){
-    //         if (this.checked) {
-    //             // console.log(list.store[i]);
-    //             // console.log('ruki uberi');
-    //             list.store[i].isDone=true;
-    //             list.save();
-    //         } else {
-    //             list.store[i].isDone=false;
-    //             list.save();
-    //         }
-    //     })
-    // }
+    
+    
 
     // for (let i=0;i<del.length;i++){
     //     //arrow func
