@@ -28,12 +28,19 @@ window.onload=function render(){
     let check = document.getElementsByClassName('check');
     const addsub = document.getElementsByClassName('addsub');
     const delsub = document.getElementsByClassName('delsub');
+    const search = document.getElementById('sr');
+    console.log(search);
+
+    search.addEventListener('input',()=>{
+        console.log('4totoizmenilos');
+            createItems(searchim(search.value,list))
+        }
+        );
 
     deldone.addEventListener('click',()=>{
         list.deleteDone();
         location.reload();
     });
-
     for (let i=0;i<del.length;i++){
             //arrow func
             del[i].addEventListener('click', function (){
@@ -106,6 +113,17 @@ window.onload=function render(){
 
     }
     
+    function searchim(query,list){
+        let spis = document.getElementsByClassName('todos')[0];
+        spis.innerHTML=' ';
+        let newlist = list.store.filter(todo =>
+            todo.title.toLowerCase().includes(query.toLowerCase())
+            );
+            console.log(newlist);
+            let filtered = {store:newlist};
+        return filtered;
+
+    }
 
 
     // for (let i=0;i<addsub.length;i++){
