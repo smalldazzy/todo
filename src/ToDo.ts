@@ -2,13 +2,12 @@ import TaskItem from "./TaskItem";
 import SubTaskItem from './SubTaskItem';
 import TaskItemTime from "./TaskItemTime";
 export default class ToDo {
-    store: Array<Object> = [];
+    store: Array<any> = [];
     constructor() {
         this.store = [];
     };
 
-    addItem(task: TaskItem) {
-        date: 
+    addItem(task) { //taskItem or TaskItemTime??????
         if (task.date) {
             this.store.push({
                 id: task.id,
@@ -33,7 +32,7 @@ export default class ToDo {
     getItems() {
         if (localStorage.getItem("TODO")) {
             let returnObj = JSON.parse(localStorage.getItem("TODO")) || [];
-            returnObj.forEach(element: => {
+            returnObj.forEach(element => {
                 if (element.date) {
                     this.store.push(new TaskItemTime(element.title, element.date, element.id, element.isDone));
                 } else {

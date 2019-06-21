@@ -8,13 +8,13 @@ window.onload = function render() {
     list.getItems();
     createItems(list);
     const submit = document.getElementById('submit');
-    const field = document.getElementById('inp');
+    const field = document.getElementById('inp') as HTMLInputElement;
     const del = document.getElementsByClassName('del');
     const deldone = document.getElementById('clear');
     let check = document.getElementsByClassName('check');
     const addsub = document.getElementsByClassName('addsub');
     const delsub = document.getElementsByClassName('delsub');
-    const search = document.getElementById('sr');
+    const search = document.getElementById('sr') as HTMLInputElement;
     const subcheck = document.getElementsByClassName('subcheck');
     const stime = document.getElementById('stime');
     search!.addEventListener('input', () => {
@@ -32,7 +32,7 @@ window.onload = function render() {
             list.store.forEach((todo, index1) => {
                 if (todo.subTasks && todo.subTasks.length > 0) {
                     todo.subTasks.forEach((subtask, index2) => {
-                        if (subtask.id == Number(event.target.parentNode.firstChild.getAttribute('id'))) {
+                        if (subtask.id == Number((<HTMLElement>(<HTMLElement>event.target).parentNode.firstChild).getAttribute('id'))) {
                             list.store[index1].subTasks.splice(index2, 1);
                             list.save();
                             location.reload();
@@ -53,7 +53,7 @@ window.onload = function render() {
 
     submit!.addEventListener('click', function () {
         let task2 = new TaskItem(field.value, Math.floor(Math.random() * 100));
-        list.addItem(task2);
+        list.addItem(task2 as TaskItem);
         list.save();
         location.reload();//cures initial empty checkbox, clears inputbox
 
@@ -73,7 +73,8 @@ window.onload = function render() {
     for (let i = 0; i < check.length; i++) {
         //arrow func
         check[i].addEventListener('change', function () {
-            list.store[i].switch();
+            // list.store[i].switch();??????????????
+            list.store[i].isDone = !list.store[i].isDone;
             list.save();
         })
     }
@@ -99,10 +100,10 @@ window.onload = function render() {
             let sublist = addsub[i].nextElementSibling || document.createElement('ul');
             sublist.setAttribute('class', 'sublist list-group');
             let subtask = new SubTaskItem(taskname);
-            sublist.innerHTML = `<li class='list-group-item'><input id='${subtask.id}' class="check" type="checkbox" style="display: inline-block"><p style="display:inline-block">${subtask.title}</p></li>`
-            event.target.parentNode.appendChild(sublist);
+            sublist.innerHTML = `<li class='list-group-item'><input id='${subtask.id}' class="check" type="checkbox" style="display: inline-block"><p style="display:inline-block">${subtask.title}</p></li>`;
+            (<HTMLElement>event.target).parentNode.appendChild(sublist);
             list.store.forEach(task => {
-                if (('_' + task.id) == event.target.getAttribute('id')) {
+                if (('_' + task.id) == (<HTMLElement>event.target).getAttribute('id')) {
                     task.subTasks.push({ id: subtask.id, title: subtask.title, isDone: false });
                 }
             });
@@ -133,7 +134,7 @@ function createItems(list) {
                 subtaskE.setAttribute('class', 'subitem list-group-item');
                 subtaskE.innerHTML = `<input class="subcheck" id='${subtask.id}' type="checkbox" style="display: inline-block"><p style="display:inline-block">${subtask.title}</p><button style="display:inline-block margin: 10px" class="delsub btn btn-danger btn-sm"> -</button>`;
                 sublist.appendChild(subtaskE);
-                if (subtask.isDone) { subtaskE.firstChild.checked = true; }
+                if (subtask.isDone) { (<HTMLInputElement>subtaskE.firstChild).checked = true; }
             });
             item.appendChild(sublist);
         }
@@ -151,7 +152,7 @@ function createItems(list) {
             item.innerHTML = `<input class="check" type="checkbox" style="display: inline-block"><p style="display:inline-block">${todo.title}</p><button style="display:inline-block" class="del btn btn-danger btn-sm"> -</button>`;
             item.appendChild(datep);
         }
-        if (todo.isDone) { item.firstChild.checked = true; }
+        if (todo.isDone) { (<HTMLInputElement>item.firstChild).checked = true; }
         todolist.appendChild(item);
     });
     div.appendChild(todolist);

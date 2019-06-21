@@ -5,10 +5,10 @@ function idgen(){
 }
 export default class TaskItemTime extends SubTaskItem{
     title!: string;
-    date: string;
-    constructor( title:string,date:string,id = idgen(),isDone = false)
+    date: number;
+    constructor( title:string,date:number,id = idgen(),isDone = false)
     {
-        super(title,id,isDone,date);
+        super(title,id,isDone);//+date
         this.date = date;
         if (!isDone && (+new Date(date)< (+new Date()))){
             this.isDone = true;
